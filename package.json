@@ -16,12 +16,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay.git"
+    "url": "git+https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay.git"
   },
-  "author": {
-    "name": "Sunny",
-    "link": "https://github.com/Aravind-Sundararajan"
-  },
+  "author": "Sunny",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay/issues"
@@ -32,5 +29,9 @@
     "description": "Show battle replay",
     "icon": "fa/video-camera",
     "priority": 12
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   }
 }
