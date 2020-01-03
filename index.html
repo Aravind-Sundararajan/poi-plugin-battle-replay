@@ -46,7 +46,7 @@
     $("#info").append("<p> it didnt work!!!! </p>"); 
    }
    files.forEach(file => {
-    var thisFileName = `${appdata}\\${file}`;
+    var thisFileName = path.join(appdata,file);
     //var thisFileNameUnzipped = `${appdata}\\${file.slice(0, -3)}`;
     if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
      if (file.split('.').indexOf('json') != -1){ //check if the ext. unzipped is json
