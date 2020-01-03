@@ -1,26 +1,34 @@
 {
-  "name": "poi-plugin-battle-replay",
-  "version": "3.1.0",
+  "name": "poi-plugin-sunny-replay",
+  "version": "1.0.0",
   "description": "A plugin which shows battle replay for poi.",
   "main": "index.js",
   "dependencies": {
-    "async": "^2.0.1"
+    "async": "^2.6.3",
+    "bluebird": "^3.7.2",
+    "electron-debug": "^3.0.1",
+    "fs": "0.0.1-security",
+    "fs-extra": "^8.1.0",
+    "lodash": "^4.17.15",
+    "path": "^0.12.7",
+    "path-extra": "^4.3.0",
+    "zlib": "^1.0.5"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Gizeta/poi-plugin-battle-replay.git"
+    "url": "https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay.git"
   },
   "author": {
-    "name":"Gizeta",
-    "link": "https://github.com/Gizeta"
+    "name": "Sunny",
+    "link": "https://github.com/Aravind-Sundararajan"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Gizeta/poi-plugin-battle-replay/issues"
+    "url": "https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay/issues"
   },
-  "homepage": "https://github.com/Gizeta/poi-plugin-battle-replay",
+  "homepage": "https://github.com/Aravind-Sundararajan/poi-plugin-battle-replay",
   "poiPlugin": {
-    "title": "Battle Replay",
+    "title": "Sunny's Battle Replay",
     "description": "Show battle replay",
     "icon": "fa/video-camera",
     "priority": 12

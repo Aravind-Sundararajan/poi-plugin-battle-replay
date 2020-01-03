@@ -3,7 +3,7 @@ window.remote = require('electron').remote;
 window.ROOT = remote.getGlobal('ROOT');
 
 window.APPDATA_PATH = remote.getGlobal('APPDATA_PATH');
-
+console.log('getting appdata_path');
 window.POI_VERSION = remote.getGlobal('POI_VERSION');
 
 window.SERVER_HOSTNAME = remote.getGlobal('SERVER_HOSTNAME');

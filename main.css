@@ -1,6 +1,35 @@
+
+
 *, html, body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  color: black;
   font-family: "Ubuntu", "Helvetica Neue", "Helvetica", "Arial", "Heiti SC", "WenQuanYi Micro Hei", "Microsoft YaHei", "Droid Sans Fallback", sans-serif;
 }
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+}
+body{background-color: #def;}
+select,option,button,input {
+  color: black;
+  font-family: "Ubuntu", "Helvetica Neue", "Helvetica", "Arial", "Heiti SC", "WenQuanYi Micro Hei", "Microsoft YaHei", "Droid Sans Fallback", sans-serif;
+}
+
+button {
+    color: #000;
+	background:rgb(33,150,243);
+	color:rgb(255,255,255);
+	text-shadow: none;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0;
+    cursor: pointer;
+    text-align: center;
+    line-height: 36px;
+}
+
 
 .btn-group {
   display: flex;
@@ -25,9 +54,4 @@
 main {
   padding: 10px;
 }
-#battlespace {
-  width: 800px;
-  height: 480px;
-  background-color: black;
-  margin: 0 auto;
-}
+
