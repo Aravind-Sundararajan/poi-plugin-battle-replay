@@ -48,7 +48,7 @@
     $("#info").append("<p> it didnt work!!!! </p>"); 
    }
     files
-    .sort(function(a, b){return b-a})
+    .sort(function(a, b){return Number(b.split('.').shift())-Number(a.split('.').shift())})
 	.forEach(file => {
 	i=i+1;
 	if (i<=64){
