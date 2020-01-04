@@ -40,12 +40,18 @@
   var scriptSRC = "<p>".concat(appdata,"</p>");
   //$("#info").append(scriptSRC); 
   var select = document.getElementById('files');  
+  var i = 0;
    fs.readdir(appdata, (err, files) => {
    //$("#info2").append(`<p> there are ${files.length} files here. <\/p>`);
+   
    if (err){
     $("#info").append("<p> it didnt work!!!! </p>"); 
    }
-   files.forEach(file => {
+    files
+    .sort(function(a, b){return a-b})
+	.forEach(file => {
+	i=i+1;
+	if (i<=64){
     var thisFileName = path.join(appdata,file);
     //var thisFileNameUnzipped = `${appdata}\\${file.slice(0, -3)}`;
     if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
@@ -77,6 +83,7 @@
       });
      }
     }
+	}
    });
   });
  
