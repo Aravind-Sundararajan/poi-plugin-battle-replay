@@ -23,7 +23,10 @@
 	</script>
     <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-    <script>if (window.module) module = window.module;</script>
+    <script>
+     if (window.module) module = window.module;
+     
+    </script>
 <script type="text/javascript">
  $(window).on('load',function(){
   const path = require('path');
@@ -32,12 +35,20 @@
   const GZIP_EXT = 'gz';
   const electron = require('electron');
   const { clipboard } = require('electron');
+  const gm = require('gm').subClass({imageMagick: true});
   const __ = require('lodash');
   const BrowserWindow = electron.remote.BrowserWindow;
   const notifyBtn = document.getElementById('notifyBtn');
   var converter =  require("./converter");
+  var generateImage = require('./generateImage');
   var appdata = path.join(APPDATA_PATH,'battle-detail');
   var scriptSRC = "<p>".concat(appdata,"</p>");
+  // creating an image
+  gm(200, 400, "#ddff99f3")
+  .drawText(10, 50, "from scratch")
+  .write("test.jpg", function (err) {
+  // ...
+  });
   //$("#info").append(scriptSRC); 
   var select = document.getElementById('files');  
   var i = 0;
@@ -73,6 +84,33 @@
         opt.innerHTML = `${timeConverter(battleJSON.time)} ${battleJSON.map}`; 
         var outputData = converter.convert(battleJSON);
         opt.value = JSON.stringify(outputData);//JSON.stringify(battleJSON);
+	const dataSize = opt.value.length;
+
+        let dim = 300;
+         while(steganography.getHidingCapacity({width: dim, height: dim}) < dataSize + 2500){
+         dim += 50;
+        }
+
+	return generateImage.generate(dim, dim, outputData, inputData, $("#ownerCaption").val())
+        .then(canvas => {
+            const encodedUrl = steganography.encode(stringData, canvas);
+            const outputImage = new Image();
+            outputImage.src = encodedUrl;
+
+            imageOutput.removeClass("loading").append($(outputImage).css("max-width", "400px"));
+            //outputContainer.find(".error-message").hide();
+
+            outputContainer.slideDown(250);
+            scrollTo("#output-container");
+
+            $("#output-text").val(stringData);
+
+        })
+        .finally(() => {
+            imageOutput.removeClass("loading");
+            //conversionProgressors.prop('disabled', false).addClass("inactive");
+        });
+        /*//*/
         select.appendChild(opt);     
        }
        catch(err){
@@ -123,7 +161,13 @@
 <button id="notifyBtn">Click here to copy input box text to battleplayer</button>
 <button id="breakyBtn">reload battleplayer</button>
 <br>
+<div class="pure-u-1 pure-form">
+ <label for="ownerCaption" >Owner/Caption: </label>
+ <input type="text" id="ownerCaption" maxlength="20"/>
 </div>
+</div>
+<img src="test.jpg">
 <webview id="battleReplay" src="https://kc3kai.github.io/kancolle-replay/battleplayer.html"  preload="./preload.js" style="display:inline-flex; width:1500px; height:1500px"></webview>
+<webview id="Poi2KC3Replayer" src="https://kazenorin.github.io/poi-to-kc3-battle-replay-converter/dist/"  preload="./preload2.js" style="display:none; width:1500px; height:1500px"></webview>
 </body>
 </html>

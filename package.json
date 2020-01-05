@@ -4,14 +4,9 @@
   "description": "A plugin which shows battle replay for poi.",
   "main": "index.js",
   "dependencies": {
-    "async": "^2.6.3",
-    "bluebird": "^3.7.2",
-    "electron-debug": "^3.0.1",
     "fs": "0.0.1-security",
-    "fs-extra": "^8.1.0",
     "lodash": "^4.17.15",
     "path": "^0.12.7",
-    "path-extra": "^4.3.0",
     "zlib": "^1.0.5"
   },
   "repository": {
