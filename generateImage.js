@@ -1,6 +1,5 @@
 const __ = require('lodash');
 const shipImages = require("./constants/ship-images");
-//const gm = require('gm').subClass({imageMagick: true});
 const titleText = "Sunny Battle Replay";
 const toWatchCaption = "To watch, upload to: ";
 const replayerUrl = "https://bit.ly/kc3-replayer";

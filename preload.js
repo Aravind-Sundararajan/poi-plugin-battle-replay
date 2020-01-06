@@ -3,4 +3,6 @@ const { ipcRenderer }= require('electron');
 ipcRenderer.on('copy', function (event,copyText) {
 	var textarea = document.getElementById('code');
 	textarea.value = copyText;
+ var codeb = document.getElementById('codeb');
+ codeb.dispatchEvent(new Event('click'));
 });

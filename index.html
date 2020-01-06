@@ -35,139 +35,152 @@
   const GZIP_EXT = 'gz';
   const electron = require('electron');
   const { clipboard } = require('electron');
-  const gm = require('gm').subClass({imageMagick: true});
   const __ = require('lodash');
+  //const steganography = require('./steganography');
   const BrowserWindow = electron.remote.BrowserWindow;
   const notifyBtn = document.getElementById('notifyBtn');
   var converter =  require("./converter");
-  var generateImage = require('./generateImage');
+  //var generateImage = require('./generateImage');
   var appdata = path.join(APPDATA_PATH,'battle-detail');
   var scriptSRC = "<p>".concat(appdata,"</p>");
-  // creating an image
-  gm(200, 400, "#ddff99f3")
-  .drawText(10, 50, "from scratch")
-  .write("test.jpg", function (err) {
-  // ...
-  });
   //$("#info").append(scriptSRC); 
   var select = document.getElementById('files');  
   var i = 0;
-   fs.readdir(appdata, (err, files) => {
+  fs.readdir(appdata, (err, files) => {
    //$("#info2").append(`<p> there are ${files.length} files here. <\/p>`);
-   
    if (err){
     $("#info").append("<p> it didnt work!!!! </p>"); 
    }
-    files
-    .sort(function(a, b){return Number(b.split('.').shift())-Number(a.split('.').shift())})
-	.forEach(file => {
-	i=i+1;
-	if (i<=64){
-    var thisFileName = path.join(appdata,file);
-    //var thisFileNameUnzipped = `${appdata}\\${file.slice(0, -3)}`;
-    if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
-     if (file.split('.').indexOf('json') != -1){ //check if the ext. unzipped is json
-	  var output = '';
-      const fileContents = fs.createReadStream(thisFileName);
-      //const writeStream = fs.createWriteStream(thisFileNameUnzipped);
-      const unzip = zlib.createGunzip();
-      fileContents.pipe(unzip)
-	  .on('data', function(chunk){
-	   output += chunk.toString();
-	  })
-	  .on('finish', function(){
-       console.log("we finished unzipping so we can read now.");
-       var content = output;
-       var battleJSON = JSON.parse(content);
-       var opt = document.createElement('option'); 
-       try{
-        opt.innerHTML = `${timeConverter(battleJSON.time)} ${battleJSON.map}`; 
-        var outputData = converter.convert(battleJSON);
-        opt.value = JSON.stringify(outputData);//JSON.stringify(battleJSON);
-	const dataSize = opt.value.length;
-
-        let dim = 300;
-         while(steganography.getHidingCapacity({width: dim, height: dim}) < dataSize + 2500){
-         dim += 50;
+   files
+   .sort(function(a, b){return Number(b.split('.').shift())-Number(a.split('.').shift())})
+   .forEach(file => {
+    i=i+1;
+    if (i<=64){
+     var thisFileName = path.join(appdata,file);
+     //var thisFileNameUnzipped = `${appdata}\\${file.slice(0, -3)}`;
+     if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
+      if (file.split('.').indexOf('json') != -1){ //check if the ext. unzipped is json
+       var output = '';
+       const fileContents = fs.createReadStream(thisFileName);
+       //const writeStream = fs.createWriteStream(thisFileNameUnzipped);
+       const unzip = zlib.createGunzip();
+       fileContents.pipe(unzip)
+       .on('data', function(chunk){
+       output += chunk.toString();
+       })
+       .on('finish', function(){
+        console.log("we finished unzipping so we can read now.");
+        var content = output;
+        var battleJSON = JSON.parse(content);
+        var opt = document.createElement('option'); 
+        try{
+         opt.innerHTML = `${timeConverter(battleJSON.time)} ${battleJSON.map}`; 
+         var outputData = converter.convert(battleJSON);
+         opt.value = JSON.stringify(outputData);//JSON.stringify(battleJSON);
+         opt.value2 = content;
+         select.appendChild(opt);     
         }
-
-	return generateImage.generate(dim, dim, outputData, inputData, $("#ownerCaption").val())
-        .then(canvas => {
-            const encodedUrl = steganography.encode(stringData, canvas);
-            const outputImage = new Image();
-            outputImage.src = encodedUrl;
-
-            imageOutput.removeClass("loading").append($(outputImage).css("max-width", "400px"));
-            //outputContainer.find(".error-message").hide();
-
-            outputContainer.slideDown(250);
-            scrollTo("#output-container");
-
-            $("#output-text").val(stringData);
-
-        })
-        .finally(() => {
-            imageOutput.removeClass("loading");
-            //conversionProgressors.prop('disabled', false).addClass("inactive");
-        });
-        /*//*/
-        select.appendChild(opt);     
-       }
-       catch(err){
-        opt.innerHTML = err;
-        opt.value = err;
-        select.appendChild(opt); 
-       }
-      });
+        catch(err){
+         opt.innerHTML = err;
+         opt.value = err;
+         opt.value2 = err;
+         select.appendChild(opt); 
+        }
+       });
+      }
      }
     }
-	}
-   });
+   }); 
   });
  
- $('#files').change(function(){
- var el = document.getElementById('display');
- el.value = ` ${this.options[this.selectedIndex].value} `;
- });
+  const webview2 = document.getElementById('Poi2KC3Replayer');
+  webview2.addEventListener('ipc-message', (event) => {
+   if (event.channel === 'copy') {
+   //$("#err").append("got copycallback");
+    //webview2.send('updateImage');,sending updateImage
+   }
+   if (event.channel === 'updateImage') {
+    //$("#err").append("got updateImage callback");
+    if (event.args) {
+     //$("#err").append(event.args);
+     var battleImage = document.getElementsByTagName("img")[0];
+     battleImage.src = event.args; 
+     //var downloadBtn = document.getElementByTagName("dl")[0];
+     //downloadBtn.href = battleImage.src;
+    }
+   }   
+  });
+
  
- var Btn = document.getElementById('notifyBtn'); 
- var BtnFix = document.getElementById('breakyBtn'); 
- BtnFix.onclick = function(){
-  const webview = document.getElementById('battleReplay');
-  webview.reload();
+  $('#files').change(function(){
+  var el = document.getElementById('display');
+  el.value = ` ${this.options[this.selectedIndex].value} `;
+  var el2 = document.getElementById('display2');
+  el2.value = ` ${this.options[this.selectedIndex].value2} `;
+  });
+  
+  var Btn = document.getElementById('notifyBtn'); 
+  var BtnFix = document.getElementById('breakyBtn'); 
+  var BtnDownload = document.getElementById('downloadBtn'); 
+  
+  
+  BtnFix.onclick = function(){
+   const webview = document.getElementById('battleReplay');
+   webview.reload();
+   const webview2 = document.getElementById('Poi2KC3Replayer');
+   webview2.reload();
+  }
+  
+  Btn.onclick = function(){
+   var el = document.getElementById('display');
+   var el2 = document.getElementById('display2');
+   var copyText = el.value;
+   var copyText2 = el2.value;
+   const webview = document.getElementById('battleReplay');
+   webview.send('copy',copyText);
+   const webview2 = document.getElementById('Poi2KC3Replayer');
+   //webview2.openDevTools();
+   webview2.send('copy',copyText2); 
+  }
+  
+ BtnDownload.onclick = function(){
+  var battleImage = document.getElementsByTagName("img")[0];
+  var url = battleImage.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
+  window.open(url);  
+  window.close(url);
  }
- Btn.onclick = function(){
- var el = document.getElementById('display');
- var copyText = el.value;
- const webview = document.getElementById('battleReplay');
- //webview.openDevTools();
- webview.send('copy',copyText);
- } 
  });
+ $(window).on('close', () =>{
+ const webview = document.getElementById('battleReplay');
+ webview.reload();
+ });
+ //window.on('open', function(){
+ // const webview = document.getElementById('battleReplay');
+ // webview.setAudioMuted(-webview.getAudioMuted())
+ //});
 </script> 
     
     
 </head>
 <body>
 <h2 class="center">Sunny's Battle Replayer</h2>
+<!-- <p id="err" class="center"></p> -->
 <p class="center">Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer</p>
-<div id="info2" class="center"></div>
-<div id="info" class="center"></div>
+<!-- <div id="info2" class="center"></div>
+<div id="info" class="center"></div> -->
 <div id="container" class="center">
-<textarea cols="38" rows="5" name="display" id="display"> </textarea>
+<textarea cols="38" rows="10" name="display" id="display"> </textarea>
+<textarea cols="38" rows="5" name="display2" id="display2" style="display:none"> </textarea>
+<img id="battleImage" src = "./download.png">
 <br>
 <select id="files"></select>
 <br>
-<button id="notifyBtn">Click here to copy input box text to battleplayer</button>
+<button id="notifyBtn">copy to battleplayer</button>
 <button id="breakyBtn">reload battleplayer</button>
+<button id="downloadBtn">download battle image</button>
 <br>
-<div class="pure-u-1 pure-form">
- <label for="ownerCaption" >Owner/Caption: </label>
- <input type="text" id="ownerCaption" maxlength="20"/>
 </div>
-</div>
-<img src="test.jpg">
 <webview id="battleReplay" src="https://kc3kai.github.io/kancolle-replay/battleplayer.html"  preload="./preload.js" style="display:inline-flex; width:1500px; height:1500px"></webview>
-<webview id="Poi2KC3Replayer" src="https://kazenorin.github.io/poi-to-kc3-battle-replay-converter/dist/"  preload="./preload2.js" style="display:none; width:1500px; height:1500px"></webview>
+<webview id="Poi2KC3Replayer" src="https://kazenorin.github.io/poi-to-kc3-battle-replay-converter/dist/index.html" preload="./preload2.js" style="display:none; width:1500px; height:1500px"></webview>
 </body>
 </html>
