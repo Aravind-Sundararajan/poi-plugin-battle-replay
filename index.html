@@ -35,6 +35,7 @@
   const GZIP_EXT = 'gz';
   const electron = require('electron');
   const { clipboard } = require('electron');
+  const remote = require('electron').remote;
   const __ = require('lodash');
   //const steganography = require('./steganography');
   const BrowserWindow = electron.remote.BrowserWindow;
@@ -139,15 +140,17 @@
    const webview = document.getElementById('battleReplay');
    webview.send('copy',copyText);
    const webview2 = document.getElementById('Poi2KC3Replayer');
-   //webview2.openDevTools();
+   webview2.openDevTools();
    webview2.send('copy',copyText2); 
   }
   
  BtnDownload.onclick = function(){
   var battleImage = document.getElementsByTagName("img")[0];
   var url = battleImage.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
-  window.open(url);  
-  //window.close(url);
+  var link = document.createElement("a");
+  link.download = "download.png";
+  link.href = url;
+  link.click();
  }
  });
  $(window).on('close', () =>{
@@ -158,6 +161,9 @@
  // const webview = document.getElementById('battleReplay');
  // webview.setAudioMuted(-webview.getAudioMuted())
  //});
+ 
+ 
+ 
 </script> 
     
     
