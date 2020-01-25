@@ -1,3 +1,4 @@
+"use strict";
 module.exports = {
     windowOptions: {
         x: config.get('poi.window.x', 0),
