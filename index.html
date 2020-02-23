@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <title>Sunny's Battle Replay</title>
-    <link rel="stylesheet" id="bootstrap-css" href="">
     <link rel="stylesheet" href="main.css">
-    <script src="env-loader.js"></script>
+	<script src="env-loader.js"></script>
+    
 	<script >
 	function timeConverter(UNIX_timestamp){
 		var a = new Date(UNIX_timestamp);
@@ -37,16 +37,35 @@
   const { clipboard } = require('electron');
   const remote = require('electron').remote;
   const __ = require('lodash');
-  //const steganography = require('./steganography');
   const BrowserWindow = electron.remote.BrowserWindow;
   const notifyBtn = document.getElementById('notifyBtn');
   var converter =  require("./converter");
-  //var generateImage = require('./generateImage');
   var appdata = path.join(APPDATA_PATH,'battle-detail');
   var scriptSRC = "<p>".concat(appdata,"</p>");
-  //$("#info").append(scriptSRC); 
   var select = document.getElementById('files');  
   var i = 0;
+  window.i18n = {};
+  window.i18n.main = new(require('i18n-2'))({
+	locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
+	defaultLocale: 'zh-CN',
+	directory: path.join(__dirname, 'i18n'),
+	extension: '.json',
+	updateFiles: false,
+	devMode: false
+  });
+  window.i18n.main.setLocale(window.language);
+  window.__ = window.i18n.main.__.bind(window.i18n.main);
+  try {
+	require('poi-plugin-translator').pluginDidLoad();  
+  }
+  catch (error) {
+	console.log(error);
+  }
+  var i18n_res = window.i18n.resources = window.i18n.resources || {};
+  i18n_res.__ = i18n_res.__ || ((str) => str);
+  i18n_res.translate = i18n_res.translate || ((locale, str) => str);
+  i18n_res.setLocale = i18n_res.setLocale || ((str) => null);
+  window.__r = i18n_res.__.bind(i18n_res);
   fs.readdir(appdata, (err, files) => {
    //$("#info2").append(`<p> there are ${files.length} files here. <\/p>`);
    if (err){
@@ -157,33 +176,21 @@
  const webview = document.getElementById('battleReplay');
  webview.reload();
  });
- //window.on('open', function(){
- // const webview = document.getElementById('battleReplay');
- // webview.setAudioMuted(-webview.getAudioMuted())
- //});
- 
- 
- 
 </script> 
-    
-    
 </head>
 <body>
 <h2 class="center">Sunny's Battle Replayer</h2>
-<!-- <p id="err" class="center"></p> -->
 <p class="center">Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer</p>
-<!-- <div id="info2" class="center"></div>
-<div id="info" class="center"></div> -->
 <div id="container" class="center">
-<textarea cols="38" rows="10" name="display" id="display"> </textarea>
+<textarea cols="38" rows="10" name="display" id="display" style="display:none"> </textarea>
 <textarea cols="38" rows="5" name="display2" id="display2" style="display:none"> </textarea>
-<img id="battleImage" src = "./download.png">
 <br>
-<select id="files"></select>
-<br>
-<button id="notifyBtn">copy to battleplayer</button>
-<button id="breakyBtn">reload battleplayer</button>
-<button id="downloadBtn">download battle image</button>
+
+<img id="battleImage" src = "./download.png" style="width:150px;height:150px;top:10px;left:40px;position:absolute;" >
+<button id="notifyBtn" style="position:absolute;top:100px;left:200px;">copy to battleplayer</button>
+<button id="breakyBtn" style="position:absolute;top:100px;left:400px;">reload battleplayer</button>
+<button id="downloadBtn" style="position:absolute;top:100px;left:600px;">download battle image</button>
+<select id="files" style="position:absolute;top:150px;left:200px;"></select>
 <br>
 </div>
 <webview id="battleReplay" src="https://kc3kai.github.io/kancolle-replay/battleplayer.html"  preload="./preload.js" style="display:inline-flex; width:1500px; height:1500px"></webview>
