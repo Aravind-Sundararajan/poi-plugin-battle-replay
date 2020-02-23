@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-sunny-replay",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A plugin which shows battle replay for poi.",
   "main": "index.js",
   "dependencies": {
