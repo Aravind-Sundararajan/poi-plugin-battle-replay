@@ -1,0 +1,5 @@
+[33m2ab80f0[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;33mtag: [m[1;33mv1.0.5[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m edited package.json and pushed to npmjs
+[33m50a3b0f[m just moved some elements around
+[33mb057752[m[33m ([m[1;31morigin/feature/index11sort[m[33m, [m[1;31morigin/feature/i18n[m[33m, [m[1;31morigin/bug/css[m[33m)[m forgot to comment openDevTools()
+[33m28f6aa0[m merging fixed download button, broke the css
+[33m544ddaf[m editing readme

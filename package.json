@@ -1,6 +1,6 @@
 {
   "name": "poi-plugin-sunny-replay",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A plugin which shows battle replay for poi.",
   "main": "index.js",
   "dependencies": {
@@ -9,7 +9,8 @@
     "math": "0.0.3",
     "path": "^0.12.7",
     "react": "^16.12.0",
-    "zlib": "^1.0.5"
+    "zlib": "^1.0.5",
+    "i18n-2": "^0.7.3"
   },
   "repository": {
     "type": "git",

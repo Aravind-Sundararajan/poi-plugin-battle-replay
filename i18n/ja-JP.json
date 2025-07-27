@@ -1,0 +1,71 @@
+{
+  "Show battle replay": "戦闘リプレイを表示",
+  "Sortie": "出撃",
+  "Practice": "演習",
+
+  "Battle Replay": "戦闘リプレイ",
+  "Options": "オプション",
+  "Play": "再生",
+  "Restart": "再開",
+  "Copy Data": "データをコピー",
+  "Paste Data": "データを貼り付け",
+
+  "Sunny's Battle Replayer": "Sunnyの戦闘リプレイヤー",
+  "Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer": "POI-viewer内で戦闘詳細ファイルをkc3kaiの戦闘リプレイ形式に変換",
+  
+  "Battle File": "戦闘ファイル",
+  "Select a battle file...": "戦闘ファイルを選択...",
+  "Copy to Battle Player": "戦闘プレイヤーにコピー",
+  "Reload Battle Player": "戦闘プレイヤーを再読み込み",
+  "Download Battle Image": "戦闘画像をダウンロード",
+  
+  "Error: APPDATA_PATH not found": "エラー：APPDATA_PATHが見つかりません",
+  "This plugin cannot find POI's data directory. Please ensure:": "このプラグインはPOIのデータディレクトリを見つけることができません。以下を確認してください：",
+  "POI-viewer is properly installed and running": "POI-viewerが正しくインストールされ、実行されている",
+  "The plugin is installed through POI's plugin manager": "プラグインがPOIのプラグイン管理機能を通じてインストールされている",
+  "You have battle data recorded in POI": "POIに戦闘データが記録されている",
+  "Expected path": "予想されるパス",
+  "If you're running this manually, please set the APPDATA_PATH environment variable.": "手動で実行している場合は、APPDATA_PATH環境変数を設定してください。",
+  
+  "No Battle Data Found": "戦闘データが見つかりません",
+  "The battle-detail directory was not found at:": "戦闘詳細ディレクトリが以下の場所に見つかりません：",
+  "This usually means:": "これは通常以下を意味します：",
+  "You haven't played any battles in Kantai Collection yet": "まだ艦隊これくしょんで戦闘をしていない",
+  "POI is not recording battle data": "POIが戦闘データを記録していない",
+  "The battle data is stored in a different location": "戦闘データが別の場所に保存されている",
+  "To fix this:": "これを修正するには：",
+  "Make sure POI is recording battle data (check POI settings)": "POIが戦闘データを記録していることを確認（POI設定を確認）",
+  "Play some battles in Kantai Collection": "艦隊これくしょんでいくつかの戦闘を行う",
+  "Restart POI and try again": "POIを再起動して再試行",
+  
+  "Error Reading Battle Data": "戦闘データの読み取りエラー",
+  "Could not read the battle-detail directory:": "戦闘詳細ディレクトリを読み取ることができませんでした：",
+  "Error": "エラー",
+  "This might be a permission issue or the directory might be corrupted.": "これは権限の問題またはディレクトリが破損している可能性があります。",
+  
+  "No Battle Files Found": "戦闘ファイルが見つかりません",
+  "The battle-detail directory is empty:": "戦闘詳細ディレクトリが空です：",
+  "You need to play some battles in Kantai Collection while POI is running to generate battle data.": "戦闘データを生成するには、POIが実行中に艦隊これくしょんでいくつかの戦闘を行う必要があります。",
+  
+  "Found {count} battle files. Loading...": "{count}個の戦闘ファイルが見つかりました。読み込み中...",
+  "Successfully converted battle file": "戦闘ファイルの変換に成功",
+  "Error converting battle file": "戦闘ファイルの変換エラー",
+  "Error processing battle file": "戦闘ファイルの処理エラー",
+  
+  "Error: No battle data selected": "エラー：戦闘データが選択されていません",
+  "Please select a battle file from the dropdown first.": "最初にドロップダウンから戦闘ファイルを選択してください。",
+  
+  "Error: Invalid battle data": "エラー：無効な戦闘データ",
+  "Please try selecting a different battle file.": "別の戦闘ファイルを選択してみてください。",
+  
+  "Error: Invalid JSON data": "エラー：無効なJSONデータ",
+  
+  "Sending battle data to webviews...": "戦闘データをウェブビューに送信中...",
+  "Data length": "データ長",
+  "Battle data sent successfully! Check the battle replayer below.": "戦闘データの送信に成功しました！下の戦闘リプレイヤーを確認してください。",
+  
+  "Error: Failed to send battle data": "エラー：戦闘データの送信に失敗",
+  "Please try again or select a different battle file.": "再試行するか、別の戦闘ファイルを選択してください。",
+
+  "": ""
+} 

@@ -1,0 +1,71 @@
+{
+  "Show battle replay": "戰鬥回放（基於[kancolle-replay](https://github.com/KC3Kai/kancolle-replay)）",
+  "Sortie": "出擊",
+  "Practice": "演習",
+
+  "Battle Replay": "戰鬥回放",
+  "Options": "選項",
+  "Play": "播放",
+  "Restart": "重置",
+  "Copy Data": "複製數據",
+  "Paste Data": "貼上數據",
+
+  "Sunny's Battle Replayer": "Sunny的戰鬥回放器",
+  "Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer": "在POI-viewer中將戰鬥詳情檔案轉換為kc3kai戰鬥回放格式",
+  
+  "Battle File": "戰鬥檔案",
+  "Select a battle file...": "選擇戰鬥檔案...",
+  "Copy to Battle Player": "複製到戰鬥播放器",
+  "Reload Battle Player": "重新載入戰鬥播放器",
+  "Download Battle Image": "下載戰鬥圖片",
+  
+  "Error: APPDATA_PATH not found": "錯誤：未找到APPDATA_PATH",
+  "This plugin cannot find POI's data directory. Please ensure:": "此插件無法找到POI的數據目錄。請確保：",
+  "POI-viewer is properly installed and running": "POI-viewer已正確安裝並運行",
+  "The plugin is installed through POI's plugin manager": "插件通過POI的插件管理器安裝",
+  "You have battle data recorded in POI": "您在POI中記錄了戰鬥數據",
+  "Expected path": "預期路徑",
+  "If you're running this manually, please set the APPDATA_PATH environment variable.": "如果您手動運行，請設置APPDATA_PATH環境變數。",
+  
+  "No Battle Data Found": "未找到戰鬥數據",
+  "The battle-detail directory was not found at:": "在以下位置未找到戰鬥詳情目錄：",
+  "This usually means:": "這通常意味著：",
+  "You haven't played any battles in Kantai Collection yet": "您還沒有在艦隊收藏中打過任何戰鬥",
+  "POI is not recording battle data": "POI沒有記錄戰鬥數據",
+  "The battle data is stored in a different location": "戰鬥數據存儲在不同位置",
+  "To fix this:": "要修復此問題：",
+  "Make sure POI is recording battle data (check POI settings)": "確保POI正在記錄戰鬥數據（檢查POI設置）",
+  "Play some battles in Kantai Collection": "在艦隊收藏中打一些戰鬥",
+  "Restart POI and try again": "重啟POI並重試",
+  
+  "Error Reading Battle Data": "讀取戰鬥數據時出錯",
+  "Could not read the battle-detail directory:": "無法讀取戰鬥詳情目錄：",
+  "Error": "錯誤",
+  "This might be a permission issue or the directory might be corrupted.": "這可能是權限問題或目錄可能已損壞。",
+  
+  "No Battle Files Found": "未找到戰鬥檔案",
+  "The battle-detail directory is empty:": "戰鬥詳情目錄為空：",
+  "You need to play some battles in Kantai Collection while POI is running to generate battle data.": "您需要在POI運行時在艦隊收藏中打一些戰鬥來生成戰鬥數據。",
+  
+  "Found {count} battle files. Loading...": "找到{count}個戰鬥檔案。正在載入...",
+  "Successfully converted battle file": "成功轉換戰鬥檔案",
+  "Error converting battle file": "轉換戰鬥檔案時出錯",
+  "Error processing battle file": "處理戰鬥檔案時出錯",
+  
+  "Error: No battle data selected": "錯誤：未選擇戰鬥數據",
+  "Please select a battle file from the dropdown first.": "請先從下拉選單中選擇戰鬥檔案。",
+  
+  "Error: Invalid battle data": "錯誤：無效的戰鬥數據",
+  "Please try selecting a different battle file.": "請嘗試選擇不同的戰鬥檔案。",
+  
+  "Error: Invalid JSON data": "錯誤：無效的JSON數據",
+  
+  "Sending battle data to webviews...": "正在向網頁視圖發送戰鬥數據...",
+  "Data length": "數據長度",
+  "Battle data sent successfully! Check the battle replayer below.": "戰鬥數據發送成功！請查看下面的戰鬥回放器。",
+  
+  "Error: Failed to send battle data": "錯誤：發送戰鬥數據失敗",
+  "Please try again or select a different battle file.": "請重試或選擇不同的戰鬥檔案。",
+
+  "": ""
+} 

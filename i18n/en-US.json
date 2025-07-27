@@ -1,7 +1,7 @@
 {
   "Show battle replay": "Show battle replay, based on [kancolle-replay](https://github.com/KC3Kai/kancolle-replay)",
   "Sortie": "Sortie",
-  "Pratice": "Pratice",
+  "Practice": "Practice",
 
   "Battle Replay": "Battle Replay",
   "Options": "Options",
@@ -9,6 +9,63 @@
   "Restart": "Restart",
   "Copy Data": "Copy Data",
   "Paste Data": "Paste Data",
+
+  "Sunny's Battle Replayer": "Sunny's Battle Replayer",
+  "Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer": "Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer",
+  
+  "Battle File": "Battle File",
+  "Select a battle file...": "Select a battle file...",
+  "Copy to Battle Player": "Copy to Battle Player",
+  "Reload Battle Player": "Reload Battle Player",
+  "Download Battle Image": "Download Battle Image",
+  
+  "Error: APPDATA_PATH not found": "Error: APPDATA_PATH not found",
+  "This plugin cannot find POI's data directory. Please ensure:": "This plugin cannot find POI's data directory. Please ensure:",
+  "POI-viewer is properly installed and running": "POI-viewer is properly installed and running",
+  "The plugin is installed through POI's plugin manager": "The plugin is installed through POI's plugin manager",
+  "You have battle data recorded in POI": "You have battle data recorded in POI",
+  "Expected path": "Expected path",
+  "If you're running this manually, please set the APPDATA_PATH environment variable.": "If you're running this manually, please set the APPDATA_PATH environment variable.",
+  
+  "No Battle Data Found": "No Battle Data Found",
+  "The battle-detail directory was not found at:": "The battle-detail directory was not found at:",
+  "This usually means:": "This usually means:",
+  "You haven't played any battles in Kantai Collection yet": "You haven't played any battles in Kantai Collection yet",
+  "POI is not recording battle data": "POI is not recording battle data",
+  "The battle data is stored in a different location": "The battle data is stored in a different location",
+  "To fix this:": "To fix this:",
+  "Make sure POI is recording battle data (check POI settings)": "Make sure POI is recording battle data (check POI settings)",
+  "Play some battles in Kantai Collection": "Play some battles in Kantai Collection",
+  "Restart POI and try again": "Restart POI and try again",
+  
+  "Error Reading Battle Data": "Error Reading Battle Data",
+  "Could not read the battle-detail directory:": "Could not read the battle-detail directory:",
+  "Error": "Error",
+  "This might be a permission issue or the directory might be corrupted.": "This might be a permission issue or the directory might be corrupted.",
+  
+  "No Battle Files Found": "No Battle Files Found",
+  "The battle-detail directory is empty:": "The battle-detail directory is empty:",
+  "You need to play some battles in Kantai Collection while POI is running to generate battle data.": "You need to play some battles in Kantai Collection while POI is running to generate battle data.",
+  
+  "Found {count} battle files. Loading...": "Found {count} battle files. Loading...",
+  "Successfully converted battle file": "Successfully converted battle file",
+  "Error converting battle file": "Error converting battle file",
+  "Error processing battle file": "Error processing battle file",
+  
+  "Error: No battle data selected": "Error: No battle data selected",
+  "Please select a battle file from the dropdown first.": "Please select a battle file from the dropdown first.",
+  
+  "Error: Invalid battle data": "Error: Invalid battle data",
+  "Please try selecting a different battle file.": "Please try selecting a different battle file.",
+  
+  "Error: Invalid JSON data": "Error: Invalid JSON data",
+  
+  "Sending battle data to webviews...": "Sending battle data to webviews...",
+  "Data length": "Data length",
+  "Battle data sent successfully! Check the battle replayer below.": "Battle data sent successfully! Check the battle replayer below.",
+  
+  "Error: Failed to send battle data": "Error: Failed to send battle data",
+  "Please try again or select a different battle file.": "Please try again or select a different battle file.",
 
   "": ""
 }

@@ -35,9 +35,7 @@
   const GZIP_EXT = 'gz';
   const electron = require('electron');
   const { clipboard } = require('electron');
-  const remote = require('electron').remote;
   const __ = require('lodash');
-  const BrowserWindow = electron.remote.BrowserWindow;
   const notifyBtn = document.getElementById('notifyBtn');
   var converter =  require("./converter");
   var appdata = path.join(APPDATA_PATH,'battle-detail');
@@ -45,91 +43,293 @@
   var select = document.getElementById('files');  
   var i = 0;
   window.i18n = {};
-  window.i18n.main = new(require('i18n-2'))({
-	locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
-	defaultLocale: 'zh-CN',
-	directory: path.join(__dirname, 'i18n'),
-	extension: '.json',
-	updateFiles: false,
-	devMode: false
-  });
-  window.i18n.main.setLocale(window.language);
-  window.__ = window.i18n.main.__.bind(window.i18n.main);
+  
+  // Theme detection and application
+  function detectAndApplyTheme() {
+    try {
+      // Try to get POI's theme from various sources
+      let theme = 'light'; // default
+      
+      // Method 1: Check if POI has a theme setting
+      if (window.POI_CONFIG && window.POI_CONFIG.theme) {
+        theme = window.POI_CONFIG.theme;
+      }
+      
+      // Method 2: Check for dark mode preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        theme = 'dark';
+      }
+      
+      // Method 3: Check for POI's specific theme classes
+      if (document.body.classList.contains('dark-theme') || 
+          document.body.classList.contains('poi-dark')) {
+        theme = 'dark';
+      }
+      
+      // Method 4: Check for POI blue theme
+      if (document.body.classList.contains('poi-blue-theme') ||
+          document.body.classList.contains('poi-blue')) {
+        theme = 'poi-blue';
+      }
+      
+      // Method 5: Check for POI dark blue theme
+      if (document.body.classList.contains('poi-dark-blue-theme') ||
+          document.body.classList.contains('poi-dark-blue')) {
+        theme = 'poi-dark-blue';
+      }
+      
+      // Apply the detected theme
+      document.documentElement.setAttribute('data-theme', theme);
+      console.log('Applied theme:', theme);
+      
+    } catch (error) {
+      console.log('Theme detection failed:', error);
+      // Fallback to light theme
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  }
+  
+  // Initialize i18n with fallback
+  try {
+    window.i18n.main = new(require('i18n-2'))({
+      locales: ['en-US', 'ja-JP', 'zh-CN', 'zh-TW'],
+      defaultLocale: 'en-US',
+      directory: path.join(__dirname, 'i18n'),
+      extension: '.json',
+      updateFiles: false,
+      devMode: false
+    });
+    console.log('Setting i18n locale to:', window.language || 'en-US');
+    window.i18n.main.setLocale(window.language || 'en-US');
+    window.__ = window.i18n.main.__.bind(window.i18n.main);
+  } catch (error) {
+    console.log('i18n initialization failed:', error);
+    // Fallback translation function
+    window.__ = function(str) { return str; };
+  }
+  
   try {
 	require('poi-plugin-translator').pluginDidLoad();  
   }
   catch (error) {
-	console.log(error);
+	console.log('poi-plugin-translator not available:', error);
   }
+  
   var i18n_res = window.i18n.resources = window.i18n.resources || {};
   i18n_res.__ = i18n_res.__ || ((str) => str);
   i18n_res.translate = i18n_res.translate || ((locale, str) => str);
   i18n_res.setLocale = i18n_res.setLocale || ((str) => null);
   window.__r = i18n_res.__.bind(i18n_res);
-  fs.readdir(appdata, (err, files) => {
-   //$("#info2").append(`<p> there are ${files.length} files here. <\/p>`);
-   if (err){
-    $("#info").append("<p> it didnt work!!!! </p>"); 
-   }
-   files
-   .sort(function(a, b){return Number(b.split('.').shift())-Number(a.split('.').shift())})
-   .forEach(file => {
-    i=i+1;
-    if (i<=64){
-     var thisFileName = path.join(appdata,file);
-     //var thisFileNameUnzipped = `${appdata}\\${file.slice(0, -3)}`;
-     if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
-      if (file.split('.').indexOf('json') != -1){ //check if the ext. unzipped is json
-       var output = '';
-       const fileContents = fs.createReadStream(thisFileName);
-       //const writeStream = fs.createWriteStream(thisFileNameUnzipped);
-       const unzip = zlib.createGunzip();
-       fileContents.pipe(unzip)
-       .on('data', function(chunk){
-       output += chunk.toString();
-       })
-       .on('finish', function(){
-        console.log("we finished unzipping so we can read now.");
-        var content = output;
-        var battleJSON = JSON.parse(content);
-        var opt = document.createElement('option'); 
-        try{
-         opt.innerHTML = `${timeConverter(battleJSON.time)} ${battleJSON.map}`; 
-         var outputData = converter.convert(battleJSON);
-         opt.value = JSON.stringify(outputData);//JSON.stringify(battleJSON);
-         opt.value2 = content;
-         select.appendChild(opt);     
-        }
-        catch(err){
-         opt.innerHTML = err;
-         opt.value = err;
-         opt.value2 = err;
-         select.appendChild(opt); 
-        }
-       });
-      }
-     }
+  
+  // Apply translations to UI elements
+  function applyTranslations() {
+    document.getElementById('header-title').textContent = window.__("Sunny's Battle Replayer");
+    document.getElementById('header-description').textContent = window.__("Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer");
+    document.getElementById('battle-file-label').textContent = window.__("Battle File");
+    document.getElementById('files').options[0].text = window.__("Select a battle file...");
+    document.getElementById('notifyBtn').textContent = window.__("Copy to Battle Player");
+    document.getElementById('breakyBtn').textContent = window.__("Reload Battle Player");
+    document.getElementById('downloadBtn').textContent = window.__("Download Battle Image");
+  }
+  
+  // Apply translations and theme after initialization
+  applyTranslations();
+  detectAndApplyTheme();
+  
+  // Initialize webview after DOM is ready
+  function initializeWebview() {
+    const webview = document.getElementById('battleReplay');
+    if (!webview) {
+      console.error('Webview element not found');
+      return;
     }
-   }); 
-  });
+    
+    // Use the external KC3Kai battle replayer (confirmed up to date by developer)
+    const webviewSrc = 'https://kc3kai.github.io/kancolle-replay/battleplayer.html';
+    console.log('Using KC3Kai battle replayer from:', webviewSrc);
+    
+    // Set the webview source
+    webview.src = webviewSrc;
+  }
+  
+  // Call the webview initialization function
+  initializeWebview();
+  
+
+    
+
+  
+  // Listen for theme changes
+  if (window.matchMedia) {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', detectAndApplyTheme);
+  }
+  
+  // Ensure environment is initialized
+  if (typeof window.APPDATA_PATH === 'undefined') {
+    console.log('APPDATA_PATH not initialized, waiting...');
+    setTimeout(() => {
+      console.log('Retrying with APPDATA_PATH:', window.APPDATA_PATH);
+      // Re-run the battle file loading logic
+      loadBattleFiles();
+    }, 1000);
+    return;
+  }
+  
+  function loadBattleFiles() {
+    // Debug logging
+    console.log('APPDATA_PATH:', APPDATA_PATH);
+    console.log('appdata path:', appdata);
+    console.log('fs.existsSync(appdata):', fs.existsSync(appdata));
+    
+    // Check if appdata directory exists
+    if (!APPDATA_PATH) {
+      $("#info").html(`
+        <div class="status-message status-error">
+          <h3>${window.__("Error: APPDATA_PATH not found")}</h3>
+          <p>${window.__("This plugin cannot find POI's data directory. Please ensure:")}</p>
+          <ul>
+            <li>${window.__("POI-viewer is properly installed and running")}</li>
+            <li>${window.__("The plugin is installed through POI's plugin manager")}</li>
+            <li>${window.__("You have battle data recorded in POI")}</li>
+          </ul>
+          <p><strong>${window.__("Expected path")}:</strong> ${appdata}</p>
+          <p>${window.__("If you're running this manually, please set the APPDATA_PATH environment variable.")}</p>
+        </div>
+      `);
+      return;
+    }
+    
+    // Check if battle-detail directory exists
+    if (!fs.existsSync(appdata)) {
+      $("#info").html(`
+        <div class="status-message status-warning">
+          <h3>${window.__("No Battle Data Found")}</h3>
+          <p>${window.__("The battle-detail directory was not found at:")}</p>
+          <p><strong>${appdata}</strong></p>
+          <p>${window.__("This usually means:")}</p>
+          <ul>
+            <li>${window.__("You haven't played any battles in Kantai Collection yet")}</li>
+            <li>${window.__("POI is not recording battle data")}</li>
+            <li>${window.__("The battle data is stored in a different location")}</li>
+          </ul>
+          <p>${window.__("To fix this:")}</p>
+          <ol>
+            <li>${window.__("Make sure POI is recording battle data (check POI settings)")}</li>
+            <li>${window.__("Play some battles in Kantai Collection")}</li>
+            <li>${window.__("Restart POI and try again")}</li>
+          </ol>
+        </div>
+      `);
+      return;
+    }
+    
+    fs.readdir(appdata, (err, files) => {
+     console.log('Reading directory:', appdata);
+     console.log('Files found:', files ? files.length : 0);
+     if (err){
+      $("#info").html(`
+        <div class="status-message status-error">
+          <h3>${window.__("Error Reading Battle Data")}</h3>
+          <p>${window.__("Could not read the battle-detail directory:")}</p>
+          <p><strong>${appdata}</strong></p>
+          <p>${window.__("Error")}: ${err.message}</p>
+          <p>${window.__("This might be a permission issue or the directory might be corrupted.")}</p>
+        </div>
+      `);
+      return;
+     }
+     
+     if (!files || files.length === 0) {
+      $("#info").html(`
+        <div class="status-message status-warning">
+          <h3>${window.__("No Battle Files Found")}</h3>
+          <p>${window.__("The battle-detail directory is empty:")}</p>
+          <p><strong>${appdata}</strong></p>
+          <p>${window.__("You need to play some battles in Kantai Collection while POI is running to generate battle data.")}</p>
+        </div>
+      `);
+      return;
+     }
+     
+     $("#info").html(`
+       <div class="status-message status-info">
+         <p><span class="loading"></span> ${window.__("Found {count} battle files. Loading...").replace('{count}', files.length)}</p>
+       </div>
+     `);
+     
+     files
+     .sort(function(a, b){return Number(b.split('.').shift())-Number(a.split('.').shift())})
+     .forEach(file => {
+      i=i+1;
+      if (i<=64){
+       var thisFileName = path.join(appdata,file);
+       if (file.split('.').pop() === GZIP_EXT){ //check if the extension is .gz
+        if (file.split('.').indexOf('json') != -1){ //check if the ext. unzipped is json
+         var output = '';
+         const fileContents = fs.createReadStream(thisFileName);
+         const unzip = zlib.createGunzip();
+         fileContents.pipe(unzip)
+         .on('data', function(chunk){
+         output += chunk.toString();
+         })
+         .on('finish', function(){
+          console.log("we finished unzipping so we can read now.");
+          var content = output;
+          try {
+            var battleJSON = JSON.parse(content);
+            var opt = document.createElement('option'); 
+            opt.innerHTML = `${timeConverter(battleJSON.time)} ${battleJSON.map}`; 
+            
+            // Test conversion to catch errors early
+            try {
+              var outputData = converter.convert(battleJSON);
+              opt.value = JSON.stringify(outputData);
+              opt.value2 = content;
+              select.appendChild(opt);
+              console.log(window.__("Successfully converted battle file") + ":", file);
+            } catch (convertError) {
+              console.error(window.__("Error converting battle file") + ":", file, convertError);
+              opt.innerHTML = `${window.__("Error")}: ${file} (${convertError.message})`;
+              opt.value = JSON.stringify({error: convertError.message, file: file});
+              opt.value2 = content;
+              select.appendChild(opt);
+            }
+          }
+          catch(err){
+           console.error(window.__("Error processing battle file") + ":", err);
+           var opt = document.createElement('option'); 
+           opt.innerHTML = `${window.__("Error")}: ${file}`;
+           opt.value = JSON.stringify({error: err.message});
+           opt.value2 = content;
+           select.appendChild(opt); 
+          }
+         })
+         .on('error', function(err) {
+           console.error('Error unzipping file:', err);
+         });
+        }
+       }
+      }
+     }); 
+    });
+  }
+  
+  // Call the battle file loading function
+  loadBattleFiles();
  
   const webview2 = document.getElementById('Poi2KC3Replayer');
   webview2.addEventListener('ipc-message', (event) => {
    if (event.channel === 'copy') {
-   //$("#err").append("got copycallback");
-    //webview2.send('updateImage');,sending updateImage
+    // Handle copy callback
    }
    if (event.channel === 'updateImage') {
-    //$("#err").append("got updateImage callback");
     if (event.args) {
-     //$("#err").append(event.args);
-     var battleImage = document.getElementsByTagName("img")[0];
+     var battleImage = document.getElementById('battleImage');
      battleImage.src = event.args; 
-     //var downloadBtn = document.getElementByTagName("dl")[0];
-     //downloadBtn.href = battleImage.src;
     }
    }   
   });
+
 
  
   $('#files').change(function(){
@@ -152,19 +352,75 @@
   }
   
   Btn.onclick = function(){
-   var el = document.getElementById('display');
-   var el2 = document.getElementById('display2');
-   var copyText = el.value;
-   var copyText2 = el2.value;
-   const webview = document.getElementById('battleReplay');
-   webview.send('copy',copyText);
-   const webview2 = document.getElementById('Poi2KC3Replayer');
-   //webview2.openDevTools();
-   webview2.send('copy',copyText2); 
+   try {
+     var el = document.getElementById('display');
+     var el2 = document.getElementById('display2');
+     var copyText = el.value;
+     var copyText2 = el2.value;
+     
+     // Validate the data before sending
+     if (!copyText || copyText.trim() === '') {
+       $("#info").html(`
+         <div class="status-message status-error">
+           <h3>${window.__("Error: No battle data selected")}</h3>
+           <p>${window.__("Please select a battle file from the dropdown first.")}</p>
+         </div>
+       `);
+       return;
+     }
+     
+     // Try to parse the JSON to validate it
+     try {
+       var parsedData = JSON.parse(copyText);
+       if (parsedData.error) {
+         $("#info").html(`
+           <div class="status-message status-error">
+             <h3>${window.__("Error: Invalid battle data")}</h3>
+             <p>${parsedData.error}</p>
+             <p>${window.__("Please try selecting a different battle file.")}</p>
+           </div>
+         `);
+         return;
+       }
+     } catch (parseError) {
+       $("#info").html(`
+         <div class="status-message status-error">
+           <h3>${window.__("Error: Invalid JSON data")}</h3>
+           <p>${parseError.message}</p>
+           <p>${window.__("Please try selecting a different battle file.")}</p>
+         </div>
+       `);
+       return;
+     }
+     
+     console.log(window.__("Sending battle data to webviews..."));
+     console.log(window.__("Data length") + ":", copyText.length);
+     
+     const webview = document.getElementById('battleReplay');
+     webview.send('copy',copyText);
+     const webview2 = document.getElementById('Poi2KC3Replayer');
+     webview2.send('copy',copyText2);
+     
+     $("#info").html(`
+       <div class="status-message status-success">
+         <p>${window.__("Battle data sent successfully! Check the battle replayer below.")}</p>
+       </div>
+     `);
+     
+   } catch (error) {
+     console.error(window.__("Error: Failed to send battle data"), error);
+     $("#info").html(`
+       <div class="status-message status-error">
+         <h3>${window.__("Error: Failed to send battle data")}</h3>
+         <p>${error.message}</p>
+         <p>${window.__("Please try again or select a different battle file.")}</p>
+       </div>
+     `);
+   }
   }
   
  BtnDownload.onclick = function(){
-  var battleImage = document.getElementsByTagName("img")[0];
+  var battleImage = document.getElementById('battleImage');
   var url = battleImage.src.replace(/^data:image\/[^;]+/, 'data:application/octet-stream');
   var link = document.createElement("a");
   link.download = "download.png";
@@ -172,28 +428,50 @@
   link.click();
  }
  });
- $(window).on('close', () =>{
- const webview = document.getElementById('battleReplay');
- webview.reload();
- });
+
 </script> 
 </head>
 <body>
-<h2 class="center">Sunny's Battle Replayer</h2>
-<p class="center">Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer</p>
-<div id="container" class="center">
-<textarea cols="38" rows="10" name="display" id="display" style="display:none"> </textarea>
-<textarea cols="38" rows="5" name="display2" id="display2" style="display:none"> </textarea>
-<br>
+    <div class="header">
+        <h2 id="header-title">Sunny's Battle Replayer</h2>
+        <p id="header-description">Convert your battle-detail files to kc3kai's battle replayer format from inside POI-viewer</p>
+    </div>
 
-<img id="battleImage" src = "./download.png" style="width:150px;height:150px;top:10px;left:40px;position:absolute;" >
-<button id="notifyBtn" style="position:absolute;top:100px;left:200px;">copy to battleplayer</button>
-<button id="breakyBtn" style="position:absolute;top:100px;left:400px;">reload battleplayer</button>
-<button id="downloadBtn" style="position:absolute;top:100px;left:600px;">download battle image</button>
-<select id="files" style="position:absolute;top:150px;left:200px;"></select>
-<br>
-</div>
-<webview id="battleReplay" src="https://kc3kai.github.io/kancolle-replay/battleplayer.html"  preload="./preload.js" style="display:inline-flex; width:1500px; height:1500px"></webview>
-<webview id="Poi2KC3Replayer" src="https://kazenorin.github.io/poi-to-kc3-battle-replay-converter/dist/index.html" preload="./preload2.js" style="display:none; width:1500px; height:1500px"></webview>
+    <div class="container">
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <div class="control-row">
+                <div class="control-group">
+                    <label for="files" id="battle-file-label">Battle File:</label>
+                    <select id="files">
+                        <option value="">Select a battle file...</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="control-row">
+                <button id="notifyBtn" class="btn btn-primary">Copy to Battle Player</button>
+                <button id="breakyBtn" class="btn btn-secondary">Reload Battle Player</button>
+                <button id="downloadBtn" class="btn btn-success">Download Battle Image</button>
+            </div>
+            
+            <div id="info"></div>
+        </div>
+
+        <!-- Battle Image -->
+        <div class="battle-image-container">
+            <img id="battleImage" src="./download.png" class="battle-image" alt="Battle Image">
+        </div>
+
+        <!-- Hidden textareas for data storage -->
+        <textarea id="display" class="hidden"></textarea>
+        <textarea id="display2" class="hidden"></textarea>
+
+        <!-- Webview Container -->
+        <div class="webview-container">
+            <webview id="battleReplay" preload="./preload.js" class="webview"></webview>
+            <webview id="Poi2KC3Replayer" src="https://kazenorin.github.io/poi-to-kc3-battle-replay-converter/dist/index.html" preload="./preload2.js" class="webview hidden"></webview>
+        </div>
+    </div>
 </body>
 </html>
